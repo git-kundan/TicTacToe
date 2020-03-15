@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe Functional</title>
+
+    <style>
+        html,
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            height: 100%;
+            width: 100%;
+        }
+
+        #navbar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            min-height: 20%;
+            width: 80%;
+            background-color: lightsalmon;
+            border-style: solid;
+            border-color: salmon;
+        }
+
+        #board {
+            display: flex;
+            min-height: 80%;
+            height: 80%;
+            width: 80%;
+            flex-direction: column;
+            justify-content: space-evenly;
+            border-style: solid;
+            border-color: lightpink;
+            background-color: lightpink;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            justify-content: space-evenly;
+        }
+
+        .cell {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-evenly;
+            border-style: solid;
+            border-color: pink;
+        }
+
+        .winner {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="navbar">
+        <div id="newGame"><input type="button" value="New Game"></div>
+        <div id="gameState"></div>
+        <div id="gameWinner"></div>
+    </div>
+
+    <div id="board">
+        <div class="row">
+            <div class="cell" id='cell0'></div>
+            <div class="cell" id='cell1'></div>
+            <div class="cell" id='cell2'></div>
+        </div>
+        <div class="row">
+            <div class="cell" id='cell3'></div>
+            <div class="cell" id='cell4'></div>
+            <div class="cell" id='cell5'></div>
+        </div>
+        <div class="row">
+            <div class="cell" id='cell6'></div>
+            <div class="cell" id='cell7'></div>
+            <div class="cell" id='cell8'></div>
+        </div>
+    </div>
+
+
+    <script>
+
+        //--------------------------Pure functions --------------------------//    
+
+        function isEitherXorO(array,index) {
+                return array[index] === 'X' || array[index] === 'O';
+        }
+
+        function areAll(array,elem){
+            return array.length > 0 ? array.filter(val => val !== elem ).length === 0 : false;
+        }
+
+        function areNone(array,elem){
+            return array.length > 0 ? array.filter(val => val === elem ).length === 0 : false;
+        }
+
+        function concat(a,b){
+            return a+b;
+        }
+
+
+        function nextMove(state,cell,current){
+            if(isEitherXorO(state,cell) || cell > state.length ) return state;
+            let resultingState = state.slice();
+            resultingState[cell] = current;
+            return resultingState;
+        }
+        
+        function gameStatus(state){
+            if(areAll(state,'_')) return {'gameState': 'New Game'};
+            if([0,1,2].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,1,2] };
+            if([3,4,5].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [3,4,5] };
+            if([6,7,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [6,7,8] };
+            if([0,3,6].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,3,6] };
+            if([1,4,7].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [1,4,7] };
+            if([2,5,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [2,5,8] };
+            if([0,4,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,4,8] };
+            if([2,4,6].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [2,4,6] };
+            if([0,1,2].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,1,2] };
+            if([3,4,5].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [3,4,5] };
+            if([6,7,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [6,7,8] };
+            if([0,3,6].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,3,6] };
+            if([1,4,7].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [1,4,7] };
+            if([2,5,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [2,5,8] };
+            if([0,4,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,4,8] };
+            if([2,4,6].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [2,4,6] };
+            if(areNone(state,'_')) return {'gameState': 'Draw'};
+            return {'gameState': 'In progress'};
+        }
+        
+        //--------------------------State------------------------------------//
+        let current = '';
+        let state = ['_','_','_','_','_','_','_','_','_',];
+        
+        //--------------------------Impure functions ------------------------//
+
+        //ticTac ---> depends on last tic
+        function ticTac() {
+            switch(current){
+                case 'X':
+                    return current = 'O';
+                default:
+                    return current = 'X';
+            }
+        };
+
+        //Cell clicks --> affects state of game
+        document.querySelectorAll('.cell').forEach(
+            elem => elem.addEventListener(
+                'click',
+                (e) => {
+                    state = nextMove(state, parseInt(e.target.id.replace('cell','')), ticTac());
+                }
+            )
+        );
+
+        //New Game button clicks ---> resets game state
+        document.querySelector('#newGame').addEventListener(
+            'click',
+            (e) => {
+                state = ['_','_','_','_','_','_','_','_','_',];
+            }
+        );
+
+        //Any click on document --> renders the UI
+        document.addEventListener(
+            'click',
+            (e) => {
+                // Populate board cells
+                document.querySelectorAll('.cell').forEach((elem, index) => {
+                                                            if (state[index] !== '_') { 
+                                                                elem.innerHTML = state[index];
+                                                            }
+                                                            else {
+                                                                elem.innerHTML = '';
+                                                            }
+                                                        });
+
+                // Populate game state
+                let gameState = gameStatus(state);
+                
+                document.querySelector('#gameState').innerHTML = `Game Status: ${gameState['gameState']}`;
+
+                if (gameState.gameState == 'Won') {
+                    document.querySelector('#gameWinner').innerHTML = `Player ${gameState.player} won!!`;
+                } else {
+                    document.querySelector('#gameWinner').innerHTML = ` `;
+                }
+
+                // Update winner cells
+                document.querySelectorAll('.cell').forEach((elem, index) => {
+                    if ( gameState.winningCells !== undefined && gameState.winningCells.includes(index)) {
+                        elem.classList.add('winner');
+                    } else {
+                        elem.classList.remove('winner');
+                    }
+                });
+            }
+        );
+                                                                                                                                                                                     
+    </script>
+</body>
+
+</html>
