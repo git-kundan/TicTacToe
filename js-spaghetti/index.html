@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #control {
+            display: flex;
+            width: 80%;
+            height: 4rem;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        #board {
+            display: flex;
+            height: 80%;
+            width: 80%;
+            flex-direction: column;
+            border-color: red;
+            border-style: solid;
+            border-size: 2px;
+        }
+
+        .row {
+            display: flex;
+            flex-basis: 33.33%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .cell {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            flex-basis: 33.33%;
+            border-color: red;
+            border-style: dashed;
+        }
+
+        .winningCell {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="control">
+        <div id="gameStatus"></div>
+        <div id="newGame"><input type="button" value="New Game"></div>
+    </div>
+    <div id="board">
+        <div class="row" id="row1">
+            <div class="cell" id="cell11"></div>
+            <div class="cell" id="cell12"></div>
+            <div class="cell" id="cell13"></div>
+        </div>
+        <div class="row" id="row2">
+            <div class="cell" id="cell21"></div>
+            <div class="cell" id="cell22"></div>
+            <div class="cell" id="cell23"></div>
+        </div>
+        <div class="row" id="row3">
+            <div class="cell" id="cell31"></div>
+            <div class="cell" id="cell32"></div>
+            <div class="cell" id="cell33"></div>
+        </div>
+    </div>
+
+    <script>
+        // New Game button
+        document.querySelector('#newGame').addEventListener('click', () => newGame());
+
+        //globals
+        var ticOrTac;
+        var gameStatus;
+        var stateMatrix;
+
+        // Tic - tac function
+        function getTicTac() {
+            return ticOrTac == 'X' ? ticOrTac = 'O' : ticOrTac = 'X';
+        };
+
+        // Get current state of the board
+        function getState() {
+            var stateArray = [];
+            var stateMatrix = [];
+            document.querySelectorAll('.cell').forEach((element) => stateArray.push(element.innerHTML));
+            for (let i = 2; i >= 0; i--) {
+                stateMatrix[i] = [];
+                for (let j = 2; j >= 0; j--) {
+                    stateMatrix[i][j] = stateArray.pop();
+                }
+            }
+            return stateMatrix;
+        }
+
+        //check state is full
+
+        //Check if won
+        function updateGameStatus() {
+            // Check if new game
+            stateMatrix = getState();
+            let rowNo = '';
+            let colNo = '';
+
+            if (countBlanks(stateMatrix) === 9) {
+                gameStatus = 'New Game';
+                document.querySelector('#gameStatus').innerHTML = gameStatus;
+                return gameStatus;
+            }
+
+
+            if (rowNo = fullRow(stateMatrix)) {
+                gameStatus = `${stateMatrix[rowNo - 1][0]} Won`;
+                document.querySelector('#gameStatus').innerHTML = gameStatus;
+                highlightRow(rowNo);
+                closeGame();
+                return gameStatus;
+            }
+
+            if (colNo = fullColumn(stateMatrix)) {
+                gameStatus = `${stateMatrix[0][colNo - 1]} Won`;
+                document.querySelector('#gameStatus').innerHTML = gameStatus;
+                highlightColumn(colNo);
+                closeGame();
+                return gameStatus;
+            }
+
+            if (diagNo = fullDiagonal(stateMatrix)) {
+                if (diagNo === 1 ) gameStatus = `${stateMatrix[0][0]} Won`;
+                if (diagNo === 2 ) gameStatus = `${stateMatrix[0][2]} Won`;
+                document.querySelector('#gameStatus').innerHTML = gameStatus;
+                highlightDiag(diagNo);
+                closeGame();
+                return gameStatus;
+            }
+
+            if (countNonBlanks(stateMatrix) === 9) {
+                gameStatus = 'Draw';
+                document.querySelector('#gameStatus').innerHTML = gameStatus;
+                return gameStatus;
+            }
+
+            gameStatus = 'In Progress';
+            fullRow(stateMatrix);
+            document.querySelector('#gameStatus').innerHTML = gameStatus;
+            return gameStatus;
+
+        }
+
+        // Win checks
+        function countNonBlanks(stateMatrix) {
+            var temp;
+            temp = stateMatrix.map(row => row.filter(val => val !== ' '));
+            temp = temp.map(row => row.map(val => 1));
+            temp = temp.filter(row => row.length > 0);
+            temp = temp.map(row => row.reduce((accumulator, currentValue) => accumulator + currentValue));
+            temp.length === 0 ? temp = 0 : temp = temp.reduce((accumulator, currentValue) => accumulator + currentValue);
+            return temp;
+        }
+
+        function countBlanks(stateMatrix) {
+            var temp;
+            temp = stateMatrix.map(row => row.filter(val => val === ' '));
+            temp = temp.map(row => row.map(val => 1));
+            temp = temp.filter(row => row.length > 0);
+            temp = temp.map(row => row.reduce((accumulator, currentValue) => accumulator + currentValue));
+            temp.length === 0 ? temp = 0 : temp = temp.reduce((accumulator, currentValue) => accumulator + currentValue);
+            return temp;
+        }
+
+        function fullRow(stateMatrix) {
+            temp = stateMatrix.map(row => row.reduce((accumulator, currentValue) => accumulator + currentValue));
+            temp = temp.map((val, index) => { if (val === 'XXX' || val === 'OOO') return index + 1; return 0; });
+            return temp.reduce((accumulator, currentValue) => accumulator + currentValue);
+        }
+
+        function fullColumn(stateMatrix) {
+            let column = [];
+            for (let j = 0; j < 3; j++) {
+                column[j] = '';
+                for (let i = 0; i < 3; i++) {
+                    column[j] += stateMatrix[i][j];
+                }
+                if ( column[j] === 'XXX' || column[j] === 'OOO' ) {
+                    return j + 1;
+                }
+            }
+            return 0;
+        }
+
+        function fullDiagonal(stateMatrix) {
+            let diag1 = '';
+            let diag2 = '';
+            for (let i = 0; i < 3 ; i++ ) {
+                for (let j=0; j < 3; j++) {
+                    if( i === j ) diag1 += stateMatrix[i][j];
+                    if ( i === 2 - j ) diag2 += stateMatrix[i][j];
+                }
+            }
+            if( diag1 === 'XXX' || diag1 === 'OOO') return 1;
+            if( diag2 === 'XXX' || diag2 === 'OOO') return 2;
+            return 0;
+        }
+
+
+        //ticTacOnClick
+        function ticTacOnClick(e) {
+            e.target.innerHTML != ' ' ? e.target.innerHTML : e.target.innerHTML = getTicTac();
+            updateGameStatus();
+        }
+
+        //Higlight Row
+        function highlightRow(rowNo){
+            console.log(`Highlighting row no ${rowNo}`);
+            for (let i = 1; i < 4; i++){
+                let cell_id = '#cell' + rowNo + i;
+                console.log(`Highlighting ${cell_id}`);
+                document.querySelector(cell_id).classList.add('winningCell');
+            }
+        }
+
+        // Highlight Column
+        function highlightColumn(colNo){
+            console.log(`Highlighting col no ${colNo}`);
+            for (let i = 1; i < 4; i++){
+                let cell_id = '#cell' + i + colNo ;
+                console.log(`Highlighting ${cell_id}`);
+                document.querySelector(cell_id).classList.add('winningCell');
+            }
+        }
+
+        // Highlight Diagonal
+        function highlightDiag(diagNo) {
+            console.log(`Highlighting diagonal no ${diagNo}`);
+            for (let i = 1; i < 4; i++) {
+                for (let j = 1; j < 4; j++) {
+                        if (diagNo === 1 && i === j) {
+                            let cell_id = '#cell' + i + j;
+                            console.log(`Highlighting ${cell_id}`);
+                            document.querySelector(cell_id).classList.add('winningCell');
+                        }
+                        if (diagNo === 2 && i === 4 - j ) {
+                            let cell_id = '#cell' + i + j;
+                            console.log(`Highlighting ${cell_id}`);
+                            document.querySelector(cell_id).classList.add('winningCell');
+                        }
+                    }
+                }
+            }
+
+        //Close game
+        function closeGame() {
+            document.querySelectorAll('.cell').forEach((elmenent) => {
+                elmenent.removeEventListener('click', ticTacOnClick);
+            });
+        }
+
+        //New Game
+        function newGame() {
+            closeGame();
+            document.querySelectorAll('.cell').forEach(elem => elem.innerHTML = ' ');
+            document.querySelectorAll('.cell').forEach((element) => {
+                element.addEventListener('click', ticTacOnClick);
+                element.classList.remove('winningCell');
+            });
+            updateGameStatus();
+        }
+
+        //inital Load   
+        newGame();
+
+    </script>
+</body>
+
+</html>
