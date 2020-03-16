@@ -103,6 +103,14 @@
             return array.length > 0 ? array.filter(val => val !== elem ).length === 0 : false;
         }
 
+        function areAllX(array){ // Could have been a curried function
+            return array.length > 0 ? array.filter(val => val !== 'X' ).length === 0 : false;
+        }
+
+        function areAllO(array){ // Could have been a curried function
+            return array.length > 0 ? array.filter(val => val !== 'O' ).length === 0 : false;
+        }
+
         function areNone(array,elem){
             return array.length > 0 ? array.filter(val => val === elem ).length === 0 : false;
         }
@@ -120,24 +128,31 @@
         }
         
         function gameStatus(state){
-            if(areAll(state,'_')) return {'gameState': 'New Game'};
-            if([0,1,2].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,1,2] };
-            if([3,4,5].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [3,4,5] };
-            if([6,7,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [6,7,8] };
-            if([0,3,6].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,3,6] };
-            if([1,4,7].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [1,4,7] };
-            if([2,5,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [2,5,8] };
-            if([0,4,8].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [0,4,8] };
-            if([2,4,6].map(i => state[i]).reduce(concat) === 'XXX') return { 'gameState':'Won', 'player':'X', 'winningCells': [2,4,6] };
-            if([0,1,2].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,1,2] };
-            if([3,4,5].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [3,4,5] };
-            if([6,7,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [6,7,8] };
-            if([0,3,6].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,3,6] };
-            if([1,4,7].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [1,4,7] };
-            if([2,5,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [2,5,8] };
-            if([0,4,8].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [0,4,8] };
-            if([2,4,6].map(i => state[i]).reduce(concat) === 'OOO') return { 'gameState':'Won', 'player':'O', 'winningCells': [2,4,6] };
+            let gameState = 'TBD';
+            
+            // Check initial state
+            if(areAll(state,'_')) {
+                gameState = {'gameState': 'New Game'};
+                return gameState;
+            } 
+
+            // Check any winning combinations
+            [   [0,1,2],[3,4,5],[6,7,8],    //Rows
+                [0,3,6],[1,4,7],[2,5,8],    //Columns
+                [0,4,8],[2,4,6]             //Diagonals
+            ]
+            .forEach( arr => {
+                if(gameState === 'TBD') {
+                    if(areAllX(arr.map( i => state[i]))) gameState = { 'gameState':'Won', 'player':'X', 'winningCells': arr };
+                    if(areAllO(arr.map( i => state[i]))) gameState = { 'gameState':'Won', 'player':'O', 'winningCells': arr };
+                }
+            });
+            if (gameState !== 'TBD')  return gameState;
+
+            //Check Draw
             if(areNone(state,'_')) return {'gameState': 'Draw'};
+
+            // In Progress
             return {'gameState': 'In progress'};
         }
         
@@ -162,7 +177,10 @@
             elem => elem.addEventListener(
                 'click',
                 (e) => {
-                    state = nextMove(state, parseInt(e.target.id.replace('cell','')), ticTac());
+                    let cellNo = parseInt(e.target.id.replace('cell',''));
+                    if ( gameStatus(state).gameState !== 'Won' && !isEitherXorO(state,cellNo) ) {
+                        state = nextMove(state, cellNo , ticTac());
+                    }
                 }
             )
         );
@@ -200,6 +218,7 @@
                     document.querySelector('#gameWinner').innerHTML = ` `;
                 }
 
+
                 // Update winner cells
                 document.querySelectorAll('.cell').forEach((elem, index) => {
                     if ( gameState.winningCells !== undefined && gameState.winningCells.includes(index)) {
@@ -213,5 +232,4 @@
                                                                                                                                                                                      
     </script>
 </body>
-
 </html>
