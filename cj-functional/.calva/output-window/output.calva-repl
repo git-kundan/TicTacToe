@@ -1,0 +1,50 @@
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:unplayed--:player2
+:unplayed--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:player1--:player2
+:unplayed--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:player1--:player2
+:unplayed--:unplayed--:unplayed
+:player2--:unplayed--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:player1--:player2
+:player1--:unplayed--:unplayed
+:player2--:unplayed--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  :in_process
+Winner:  :none
+:player1--:player1--:player2
+:player1--:unplayed--:unplayed
+:player2--:player1--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  Won
+Winner:  :player2
+:player1--:player1--:player2
+:player1--:player2--:unplayed
+:player2--:player1--:unplayed
+Game  #uuid "c3c56902-dd41-42eb-8915-e21b0e5a702d"
+Status:  Won
+Winner:  :player2
+:player1--:player1--:player2
+:player1--:player2--:unplayed
+:player2--:player1--:player2
+#'cj-functional.core/played-game
+clj::cj-functional.core=> 
