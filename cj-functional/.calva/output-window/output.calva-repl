@@ -1,66 +1,115 @@
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :none
+Message:  :none
+:unplayed--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+:unplayed--:unplayed--:unplayed
+
+-------------------------------
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
+Status:  :in-process
+Winner:  :none
+Last Player:  :player1
+Message:  Player :player1, Cell :c11. Success
 :player1--:unplayed--:unplayed
 :unplayed--:unplayed--:unplayed
 :unplayed--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :player2
+Message:  Player :player2, Cell :c13. Success
 :player1--:unplayed--:player2
 :unplayed--:unplayed--:unplayed
 :unplayed--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :player1
+Message:  Player :player1, Cell :c12. Success
 :player1--:player1--:player2
 :unplayed--:unplayed--:unplayed
 :unplayed--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :player2
+Message:  Player :player2, Cell :c31. Success
 :player1--:player1--:player2
 :unplayed--:unplayed--:unplayed
 :player2--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :player1
+Message:  Player :player1, Cell :c21. Success
 :player1--:player1--:player2
 :player1--:unplayed--:unplayed
 :player2--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :in-process
 Winner:  :none
+Last Player:  :player1
+Message:  Invalid move. Player :player1, Cell :c21. Error: cell already played
 :player1--:player1--:player2
 :player1--:unplayed--:unplayed
-:player2--:player1--:unplayed
+:player2--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
-Status:  :Won
-Winner:  :player2
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
+Status:  :in-process
+Winner:  :none
+Last Player:  :player1
+Message:  Invalid move. Player :player1, Cell :c32. Error: turn of next player
 :player1--:player1--:player2
-:player1--:player2--:unplayed
-:player2--:player1--:unplayed
+:player1--:unplayed--:unplayed
+:player2--:unplayed--:unplayed
 
 -------------------------------
-Game  #uuid "3f07762a-a826-418d-bfa4-63f6e5e359ce"
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
 Status:  :Won
 Winner:  :player2
+Last Player:  :player2
+Message:  Player :player2, Cell :c22. Success
 :player1--:player1--:player2
 :player1--:player2--:unplayed
-:player2--:player1--:unplayed
-#'cj-functional.core/played-game
+:player2--:unplayed--:unplayed
+
+-------------------------------
+Game  #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd"
+Status:  :Won
+Winner:  :player2
+Last Player:  :player2
+Message:  Invalid move. Player :player2, Cell :c33. Error:  game not in progress
+:player1--:player1--:player2
+:player1--:player2--:unplayed
+:player2--:unplayed--:unplayed
+{:game-id #uuid "7a854fd9-b82c-4814-aca5-4dd7fc424afd",
+ :game-status :Won,
+ :c11 :player1,
+ :c31 :player2,
+ :c32 :unplayed,
+ :c22 :player2,
+ :c13 :player2,
+ :game-winner :player2,
+ :c21 :player1,
+ :last-move-message "Invalid move. Player :player1, Cell :c23. Error:  game not in progress",
+ :c33 :unplayed,
+ :c23 :unplayed,
+ :last-player :player2,
+ :c12 :player1}
 clj::cj-functional.core=> 
